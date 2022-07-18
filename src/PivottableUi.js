@@ -6,6 +6,8 @@ import TableRenderer from './TableRenderer'
 import PlotlyRenderer from './PlotlyRenderer'
 import { PivotData, getSort, sortAs, aggregators } from './helper/utils'
 import draggable from 'vuedraggable'
+import { h } from 'vue'
+
 export default {
   name: 'vue-pivottable-ui',
   mixins: [
@@ -241,7 +243,7 @@ export default {
       })
     },
     assignValue (field) {
-      this.$set(this.propsData.valueFilter, field, {})
+      this.propsData.valueFilter[field] = {}
     },
     propUpdater (key) {
       return value => {
@@ -249,14 +251,14 @@ export default {
       }
     },
     updateValueFilter ({ attribute, valueFilter }) {
-      this.$set(this.propsData.valueFilter, attribute, valueFilter)
+      this.propsData.valueFilter[attribute] = valueFilter
     },
     moveFilterBoxToTop ({ attribute }) {
       this.maxZIndex += 1
       this.zIndices[attribute] = this.maxZIndex + 1
     },
     openFilterBox ({ attribute, open }) {
-      this.$set(this.openStatus, attribute, open)
+      this.openStatus[attribute] = open
     },
     closeFilterBox (event) {
       this.openStatus = {}
@@ -291,8 +293,8 @@ export default {
       this.materializedInput = materializedInput
       this.attrValues = attrValues
     },
-    makeDnDCell (items, onChange, classes, h) {
-      const scopedSlots = this.$scopedSlots.pvtAttr
+    makeDnDCell (items, onChange, classes) {
+      const scopedSlots = this.$slots.pvtAttr
       return h(draggable, {
         attrs: {
           draggable: 'li[data-id]',
@@ -343,7 +345,7 @@ export default {
         })
       ])
     },
-    rendererCell (rendererName, h) {
+    rendererCell (rendererName) {
       return this.$slots.rendererCell
         ? h('td', {
           staticClass: ['pvtRenderers pvtVals pvtText']
@@ -366,7 +368,7 @@ export default {
           })
         ])
     },
-    aggregatorCell (aggregatorName, vals, h) {
+    aggregatorCell (aggregatorName, vals) {
       return this.$slots.aggregatorCell
         ? h('td', {
           staticClass: ['pvtVals pvtText']
@@ -433,7 +435,7 @@ export default {
             : undefined
         ])
     },
-    outputCell (props, isPlotlyRenderer, h) {
+    outputCell (props, isPlotlyRenderer) {
       return h('td', {
         staticClass: ['pvtOutput']
       },
@@ -451,13 +453,16 @@ export default {
       ])
     }
   },
-  render (h) {
+  render () {
     if (this.data.length < 1) return
-    const outputScopedSlot = this.$scopedSlots.output
+    const outputScopedSlot = this.$slots.output
     const outputSlot = this.$slots.output
     const rendererName = this.propsData.rendererName
     const aggregatorName = this.propsData.aggregatorName
     const vals = this.propsData.vals
+   console.log(this.$props);
+    console.log(this.propsData)
+   console.log(this.props)
     const unusedAttrsCell = this.makeDnDCell(
       this.unusedAttrs,
       e => {
@@ -538,12 +543,12 @@ export default {
     } catch (error) {
       // eslint-disable-next-line no-console
       if (console && console.error(error.stack)) {
-        return this.computeError(h)
+        return this.computeError()
       }
     }
-    const rendererCell = this.rendererCell(rendererName, h)
-    const aggregatorCell = this.aggregatorCell(aggregatorName, vals, h)
-    const outputCell = this.outputCell(props, rendererName.indexOf('Chart') > -1, h)
+    const rendererCell = this.rendererCell(rendererName)
+    const aggregatorCell = this.aggregatorCell(aggregatorName, vals)
+    const outputCell = this.outputCell(props, rendererName.indexOf('Chart') > -1)
     const colGroupSlot = this.$slots.colGroup
     return h('table', {
       staticClass: ['pvtUi']
@@ -580,6 +585,6 @@ export default {
     ])
   },
   renderError (h, error) {
-    return this.uiRenderError(h)
+    return this.uiRenderError()
   }
 }

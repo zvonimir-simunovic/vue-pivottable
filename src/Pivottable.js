@@ -1,5 +1,7 @@
 import TableRenderer from './TableRenderer'
 import defaultProps from './helper/common'
+import { h } from 'vue'
+
 export default {
   name: 'vue-pivottable',
   mixins: [
@@ -11,7 +13,7 @@ export default {
     }
   },
   methods: {
-    createPivottable (h) {
+    createPivottable () {
       const props = this.$props
       return h(this.rendererItems[this.rendererName], {
         props: Object.assign(
@@ -20,7 +22,7 @@ export default {
         )
       })
     },
-    createWrapperContainer (h) {
+    createWrapperContainer () {
       return h('div', {
         style: {
           display: 'block',
@@ -29,14 +31,14 @@ export default {
           'max-width': this.tableMaxWidth ? `${this.tableMaxWidth}px` : undefined
         }
       }, [
-        this.createPivottable(h)
+        this.createPivottable()
       ])
     }
   },
-  render (h) {
-    return this.createWrapperContainer(h)
+  render () {
+    return this.createWrapperContainer()
   },
   renderError (h, error) {
-    return this.renderError(h)
+    return this.renderError()
   }
 }

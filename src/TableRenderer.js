@@ -1,5 +1,7 @@
 import { PivotData } from './helper/utils'
 import defaultProps from './helper/common'
+import { h } from 'vue'
+
 function redColorScaleGenerator (values) {
   const min = Math.min.apply(Math, values)
   const max = Math.max.apply(Math, values)
@@ -79,13 +81,14 @@ function makeRenderer (opts = {}) {
         return len
       }
     },
-    render (h) {
+    render () {
       let pivotData = null
       try {
         const props = Object.assign({},
           this.$props,
           this.$attrs.props
         )
+       console.log(props)
         pivotData = new PivotData(props)
       } catch (error) {
         // eslint-disable-next-line no-console
@@ -317,7 +320,7 @@ function makeRenderer (opts = {}) {
       ])
     },
     renderError (h, error) {
-      return this.renderError(h)
+      return this.renderError()
     }
   }
   return TableRenderer
@@ -326,7 +329,7 @@ function makeRenderer (opts = {}) {
 const TSVExportRenderer = {
   name: 'tsv-export-renderers',
   mixins: [defaultProps],
-  render (h) {
+  render () {
     const pivotData = new PivotData(this.$props)
     const rowKeys = pivotData.getRowKeys()
     const colKeys = pivotData.getColKeys()
@@ -366,7 +369,7 @@ const TSVExportRenderer = {
     })
   },
   renderError (h, error) {
-    return this.renderError(h)
+    return this.renderError()
   }
 }
 

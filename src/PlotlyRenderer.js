@@ -1,6 +1,8 @@
 import { PivotData } from './helper/utils'
 import defaultProps from './helper/common'
 import { Plotly } from 'vue-plotly'
+import { h } from 'vue'
+
 function makeRenderer (opts = {}, traceOptions = {}, layoutOptions = {}, transpose = false) {
   const plotlyRenderer = {
     name: opts.name,
@@ -13,7 +15,7 @@ function makeRenderer (opts = {}, traceOptions = {}, layoutOptions = {}, transpo
         }
       }
     },
-    render (h) {
+    render () {
       const pivotData = new PivotData(this.$props)
       const rowKeys = pivotData.getRowKeys()
       const colKeys = pivotData.getColKeys()
@@ -117,7 +119,7 @@ function makeScatterRenderer (opts = {}) {
         }
       }
     },
-    render (h) {
+    render () {
       const pivotData = new PivotData(this.$props)
       const rowKeys = pivotData.getRowKeys()
       const colKeys = pivotData.getColKeys()

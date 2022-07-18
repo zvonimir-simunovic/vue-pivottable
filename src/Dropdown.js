@@ -1,3 +1,5 @@
+import { h } from 'vue'
+
 export default {
   props: ['values', 'value'],
   model: {
@@ -5,14 +7,14 @@ export default {
     event: 'input'
   },
   created () {
-    this.$emit('input', this.values[0])
+    this.$emit('input', this.values && this.values.length > 0 ? this.values[0] : null)
   },
   methods: {
     handleChange (e) {
       this.$emit('input', e.target.value)
     }
   },
-  render (h) {
+  render () {
     return h('select', {
       staticClass: ['pvtDropdown'],
       domProps: {
@@ -23,7 +25,7 @@ export default {
       }
     },
     [
-      this.values.map(r => {
+     this.values ? this.values.map(r => {
         const text = r
         return h('option', {
           attrs: {
@@ -31,7 +33,7 @@ export default {
             selected: r === this.value ? 'selected' : undefined
           }
         }, text)
-      })
+      }) : []
     ])
   }
 }

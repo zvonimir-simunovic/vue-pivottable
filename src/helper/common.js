@@ -1,4 +1,5 @@
 import { aggregators, locales } from './utils'
+import { h } from 'vue'
 
 export default {
   props: {
@@ -114,13 +115,13 @@ export default {
     }
   },
   methods: {
-    renderError (h) {
+    renderError () {
       return h('span', (this.locales[this.locale].localeStrings.renderError) || 'An error occurred rendering the PivotTable results.')
     },
-    computeError (h) {
+    computeError () {
       return h('span', (this.locales[this.locale].localeStrings.computeError) || 'An error occurred computing the PivotTable results.')
     },
-    uiRenderError (h) {
+    uiRenderError () {
       return h('span', (this.locales[this.locale].localeStrings.uiRenderError) || 'An error occurred rendering the PivotTable UI.')
     }
   }

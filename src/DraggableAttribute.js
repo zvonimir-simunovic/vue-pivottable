@@ -1,3 +1,4 @@
+import { h } from 'vue'
 
 export default {
   name: 'draggable-attribute',
@@ -111,7 +112,7 @@ export default {
       this.value = value
       this.setValuesInFilter(this.name, Object.keys(this.attrValues).filter(y => y !== value))
     },
-    getFilterBox (h) {
+    getFilterBox () {
       const showMenu = Object.keys(this.attrValues).length < this.menuLimit
       const values = Object.keys(this.attrValues)
       const shown = values.filter(this.matchesFilter.bind(this)).sort(this.sorter)
@@ -219,7 +220,7 @@ export default {
     toggleFilterBox (event) {
       event.stopPropagation()
       if (!this.attrValues) {
-        if (this.$listeners['no:filterbox']) {
+        if (this.$attrs['no:filterbox']) {
           this.$emit('no:filterbox')
         }
         return
@@ -231,9 +232,9 @@ export default {
       this.$emit('open:filterbox', { attribute, open })
     }
   },
-  render (h) {
+  render () {
     const filtered = Object.keys(this.valueFilter).length !== 0 ? 'pvtFilteredAttribute' : ''
-    const pvtAttrScopedSlot = this.$scopedSlots.pvtAttr
+    const pvtAttrScopedSlot = this.$slots.pvtAttr
     return h('li', {
       attrs: {
         'data-id': !this.disabled ? this.name : undefined
@@ -256,7 +257,7 @@ export default {
               'click': this.toggleFilterBox.bind(this)
             }
           }, '  ▾') : undefined,
-        this.open ? this.getFilterBox(h) : undefined
+        this.open ? this.getFilterBox() : undefined
       ]
       )
     ])
